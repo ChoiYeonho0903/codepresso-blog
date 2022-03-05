@@ -41,4 +41,10 @@ public class PostController {
         return "success";
     }
 
+    @DeleteMapping("/post")
+    public String deletePost(@RequestParam Integer postId) {
+        postService.deletePost(postId);
+        return "success";
+    }
+
 }

@@ -67,13 +67,126 @@ $(function(){
         })
     })
 
+    $("#post-delete-button").click(function () {
+        let post_id = parseInt($("#post-id").val());
+
+        $.ajax({
+            method: "DELETE",
+            url: "/post",
+            data: {
+                "postId": post_id
+            }
+        })
+        .done(function (response){
+            console.log("Post delete success!");
+            window.location.href = "/";
+        })
+    })
+
+    $("#more-comment-button").click(function(){
+        var next_page = parseInt($(this).attr("current-comment-page")) + 1;
+        var post_id = parseInt($("#post-id").val());
+
+        $.ajax({
+            method: "GET",
+            url: "/comment",
+            data: {
+                "page": next_page,
+                "postId": post_id
+            }
+        })
+        .done(function(response) {
+            for (let comment of response) {
+                $("#more-comment").append(
+                    "<div class=\"comment_text\">" +
+                        "<div class=\"etc\">" +
+                            "<div class=\"name\">" +
+                                comment.username +
+                            "</div>" +
+                        "</div>" +
+                        "<p>" +
+                            comment.content +
+                        "</p>" +
+                        "<div class=\"edit_btns\">" +
+                            "<button class=\"comment-edit-form-button\">수정</button>" +
+                            "<button id=\"comment-delete-button\">삭제</button>" +
+                        "</div>" +
+                            <!--수정 시-->
+                            "<textarea class=\"edit comment-edit\" name=\"\" id=\"edit2\" cols=\"30\" rows=\"10\" placeholder=\"댓글을 입력해주세요\"></textarea>" +
+                            "<div class=\"save_btns comment-edit\">" +
+                                "<button class=\"comment-edit-cancel-button\">취소</button>" +
+                                "<button class=\"save\" id=\"comment-edit-button\">저장하기</button>" +
+                            "</div>" +
+                    "</div>");
+            }
+            $(".comment-edit").hide();
+        });
+        $(this).attr("current-comment-page", next_page);
+    });
+
+    $("#comment-save-button").click(function(){
+        var username = $("#comment-username").val();
+        var content = $("#comment-content").val();
+        var post_id = $("#post-id").val();
+
+        $.ajax({
+            method: "POST",
+            url: "/comment",
+            data: JSON.stringify({
+                "username": username,
+                "content": content,
+                "postId": post_id
+            }),
+            contentType: "application/json"
+        })
+        .done(function (response) {
+            console.log("Comment creation success!");
+            window.location.href = "/post/"+post_id;
+        });
+    });
+
+    $(document).on("click","#comment-edit-button",function(){
+        let post_id = $("#post-id").val();
+        let comment_id = $(this).parent().parent().children(".comment-id").val();
+        let comment_content = $("#comment-edit-content").val();
+
+        $.ajax({
+            method: "PUT",
+            url: "/comment",
+            data: JSON.stringify({
+                "content": comment_content,
+                "id": comment_id
+            }),
+            contentType: "application/json"
+        })
+        .done(function(response) {
+            console.log("Comment edit success!");
+            window.location.href = "/post/"+post_id;
+        });
+    });
+
     $(".comment-edit").hide();
 
-    $(".comment-edit-form-button").click(function(){
+    $(document).on("click",".comment-edit-form-button",function(){
         $(this).closest(".comment_text").find(".comment-edit").show();
     });
 
-    $(".comment-edit-cancel-button").click(function(){
+    $(document).on("click",".comment-edit-cancel-button",function(){
         $(this).closest(".comment_text").find(".comment-edit").hide();
+    });
+
+    $(document).on("click","#comment-delete-button",function(){
+        let post_id = $("#post-id").val();
+        let comment_id = $(this).parent().parent().children(".comment-id").val();
+
+        $.ajax({
+            method: "DELETE",
+            url: "/comment",
+            data: {"commentId" : comment_id}
+        })
+        .done(function(response) {
+            console.log("Comment deletion success!");
+            window.location.href = "/post/"+ post_id;
+        });
     });
 });

@@ -33,4 +33,9 @@ public class PostService {
         Integer result = postMapper.update(post);
         return result == 1;
     }
+
+    public boolean deletePost (Integer postId) {
+        Integer result = postMapper.delete(postId);
+        return result == 1;
+    }
 }

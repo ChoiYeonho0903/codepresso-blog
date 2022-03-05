@@ -16,3 +16,14 @@ INSERT INTO post(title, content, username)
 VALUES ('Spring Native', 'Incubating support for compiling Spring applications to native executables using the GraalVM native-image compiler.', 'jhkim');
 INSERT INTO post(title, content, username)
 VALUES ('Spring Session', 'Provides an API and implementations for managing user session information.', 'dhlee');
+
+INSERT INTO comment(post_id, content, username)
+VALUES (9, 'comment content 1', 'dhlee');
+INSERT INTO comment(post_id, content, username)
+VALUES (9, 'comment content 2', 'dhlee');
+INSERT INTO comment(post_id, content, username)
+VALUES (9, 'comment content 3', 'jhkim');
+INSERT INTO comment(post_id, content, username)
+VALUES (9, 'comment content 4', 'dhlee');
+INSERT INTO comment(post_id, content, username)
+VALUES (9, 'comment content 5', 'jhkim');

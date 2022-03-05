@@ -13,4 +13,5 @@ public interface PostMapper {
     Post findOne(@Param("id") Integer id);
     Integer save(@Param("post") Post post); // 영향받은 row의 갯수가 return 된다.
     Integer update(@Param("post") Post post);
+    Integer delete(@Param("id") Integer postId);
 }

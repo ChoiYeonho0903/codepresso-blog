@@ -32,5 +32,10 @@
         SET title=#{post.title}, content=#{post.content}
         WHERE id=#{post.id};
     </update>
+
+    <delete id="delete">
+        DELETE post
+        where id=#{id};
+    </delete>
 </mapper>
 
